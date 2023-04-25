@@ -40,7 +40,7 @@ def get_rouge_L_score(predicts:list, labels:list):
 
 
 def get_predictions(batch_size = 2, dataset_dict:dict = {'train':'./yc2_captions/train.csv', 'validation':'./yc2_captions/val.csv', 'test':'./yc2_captions/test.csv'},
-                    model_path:str='./flan-t5-small-trained'):
+                    model_path:str='./flan-t5-small-trained', device:str = 'cpu'):
     model, tokenizer = get_model(model_path)
     dataset = CaptionDataset.get_hf_ds(data_files=dataset_dict)
     tokenized_ds = CaptionDataset.tokenize_ds(dataset, tokenizer, deep_copy=True)
@@ -51,9 +51,9 @@ def get_predictions(batch_size = 2, dataset_dict:dict = {'train':'./yc2_captions
 
     labels_lst =[]
     predicts_lst = []
-    model = model.to(7)
+    model = model.to(device)
     for batch in tqdm(test_dataloader):
-        batch = batch.to(7)
+        batch = batch.to(device)
         labels_tensor = convert_labels(batch['labels'], tokenizer)
 
         labels = tokenizer.batch_decode(labels_tensor, skip_special_tokens=True)
@@ -87,9 +87,9 @@ def get_predictions(batch_size = 2, dataset_dict:dict = {'train':'./yc2_captions
 #     print(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 #     print(tokenizer.batch_decode(convert_labels(batch['labels'], tokenizer), skip_special_tokens=True))
 
-def test_model(batch_size = 2, test_dataset:str = './yc2_captions/test.csv'):
+def test_model(batch_size = 2, test_dataset:str = './yc2_captions/test.csv', device:str='cpu'):
     datafiles = {'train':test_dataset, 'validation':test_dataset, 'test':test_dataset}
-    preds, labels = get_predictions(batch_size, dataset_dict=datafiles)
+    preds, labels = get_predictions(batch_size, dataset_dict=datafiles, device=device)
 
     print('BLEU Score:\t', get_bleu_score(preds, labels))
     print('METEOR Score:\t', get_meteor_score(preds, labels))
