@@ -1,8 +1,11 @@
+import typing
+
 import CaptionDataset
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, DataCollatorForSeq2Seq
 from nltk.translate.bleu_score import corpus_bleu
 import evaluate
-import pickle
+
+from pandas import DataFrame
 
 from tqdm import tqdm
 
@@ -39,10 +42,10 @@ def get_rouge_L_score(predicts:list, labels:list):
 
 
 
-def get_predictions(batch_size = 2, dataset_dict:dict = {'train':'./yc2_captions/train.csv', 'validation':'./yc2_captions/val.csv', 'test':'./yc2_captions/test.csv'},
+def get_predictions(batch_size = 2, test_dataset_type:str = 'csv', dataset_dict:dict = {'train':'./yc2_captions/train.csv', 'validation':'./yc2_captions/val.csv', 'test':'./yc2_captions/test.csv'},
                     model_path:str='./flan-t5-small-trained', device:str = 'cpu'):
     model, tokenizer = get_model(model_path)
-    dataset = CaptionDataset.get_hf_ds(data_files=dataset_dict)
+    dataset = CaptionDataset.get_hf_ds(data_type=test_dataset_type, data_files=dataset_dict)
     tokenized_ds = CaptionDataset.tokenize_ds(dataset, tokenizer, deep_copy=True)
    
     collator = DataCollatorForSeq2Seq(tokenizer=tokenizer)
@@ -87,9 +90,9 @@ def get_predictions(batch_size = 2, dataset_dict:dict = {'train':'./yc2_captions
 #     print(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 #     print(tokenizer.batch_decode(convert_labels(batch['labels'], tokenizer), skip_special_tokens=True))
 
-def test_model(batch_size = 2, test_dataset:str = './yc2_captions/test.csv', device:str='cpu'):
+def test_model(batch_size = 2, test_dataset_type:str = 'csv', test_dataset:typing.Union(str, DataFrame) = './yc2_captions/test.csv', device:str='cpu'):
     datafiles = {'train':test_dataset, 'validation':test_dataset, 'test':test_dataset}
-    preds, labels = get_predictions(batch_size, dataset_dict=datafiles, device=device)
+    preds, labels = get_predictions(batch_size, test_dataset_type=test_dataset_type, dataset_dict=datafiles, device=device)
 
     print('BLEU Score:\t', get_bleu_score(preds, labels))
     print('METEOR Score:\t', get_meteor_score(preds, labels))

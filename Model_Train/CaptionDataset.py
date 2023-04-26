@@ -131,8 +131,17 @@ def downsample_dataset(dataset:dict, downsample_num:float=1.0):
     
     return dataset
 
-def get_hf_ds(data_type:str = 'csv', data_files = {'train':'./yc2_captions/train.csv', 'test':'./yc2_captions/test.csv', 'validation':'./yc2_captions/val.csv'}):
-    dataset = datasets.load_dataset('csv', data_files=data_files)
+def get_hf_ds(data_type:str = 'csv', data_files:dict = {'train':'./yc2_captions/train.csv', 'test':'./yc2_captions/test.csv', 'validation':'./yc2_captions/val.csv'}):
+    
+    if data_type == 'pandas':
+        dataset_dict = {}
+        for key in data_files.keys():
+            dataset_dict[key] = datasets.Dataset.from_pandas(data_files[key])
+        
+        dataset = datasets.DatasetDict(dataset_dict)
+    
+    else:
+        dataset = datasets.load_dataset('csv', data_files=data_files)
 
     return dataset
 
