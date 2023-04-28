@@ -90,7 +90,7 @@ def get_predictions(batch_size = 2, test_dataset_type:str = 'csv', dataset_dict:
 #     print(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 #     print(tokenizer.batch_decode(convert_labels(batch['labels'], tokenizer), skip_special_tokens=True))
 
-def test_model(batch_size = 2, test_dataset_type:str = 'csv', test_dataset:typing.Union(str, DataFrame) = './yc2_captions/test.csv', device:str='cpu'):
+def test_model(batch_size = 2, test_dataset_type:str = 'csv', test_dataset = './yc2_captions/test.csv', device:str='cpu'):
     datafiles = {'train':test_dataset, 'validation':test_dataset, 'test':test_dataset}
     preds, labels = get_predictions(batch_size, test_dataset_type=test_dataset_type, dataset_dict=datafiles, device=device)
 
