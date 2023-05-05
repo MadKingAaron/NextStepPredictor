@@ -50,11 +50,12 @@ def get_args():
 
 def main():
     args = get_args()
-    print(args)
+    #print(args)
     ds = get_infered_samples(test_dataset = args.test_dataset, device=args.device, video_dir=args.video_dir)
-    print('Done')
-    #model_test.test_model(test_dataset_type='pandas', test_dataset=ds, device=args.device, batch_size=args.batch_size)
-    print(ds)
+    #print('Done')
+    ds = pd.read_csv(args.test_dataset)
+    model_test.test_model(test_dataset_type='pandas', test_dataset=ds, device=args.device, batch_size=args.batch_size)
+    #print(ds)
 
 
 if __name__ == '__main__':
