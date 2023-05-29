@@ -37,12 +37,15 @@ def get_infered_samples(test_dataset:str, device:str, video_dir:str):
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--test_dataset', type=str, default='./vid_split.csv', help='Filepath for test dataset')
+    parser.add_argument('--test_dataset', type=str, default='./test_5-7_merged.csv', help='Filepath for test dataset')
     parser.add_argument('--video_dir', type=str, default='./Videos', help='Directory containing all video files')
+    parser.add_argument('--lang_model', type=str, default="./Models/flan-t5-small-merged-accel-5-13", help='Path for language model')
     parser.add_argument('--device', type=str, default='cuda:6', help='PyTorch device - i.e. "cpu", "cuda", "cuda:0", "cuda:1", etc.')
     parser.add_argument('-b', '--batch_size', type=int, default=2, help='Test batch size for predicting next step')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    sys.argv = [sys.argv[0]]
+    return args
 
 
 
@@ -50,10 +53,11 @@ def get_args():
 
 def main():
     args = get_args()
+    
     #print(args)
     ds = get_infered_samples(test_dataset = args.test_dataset, device=args.device, video_dir=args.video_dir)
     #print('Done')
-    ds = pd.read_csv(args.test_dataset)
+    #ds = pd.read_csv(args.test_dataset)
     model_test.test_model(test_dataset_type='pandas', test_dataset=ds, device=args.device, batch_size=args.batch_size)
     #print(ds)
 
