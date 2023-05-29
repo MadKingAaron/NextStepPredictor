@@ -16,6 +16,8 @@ To install the libraries, please run `pip install -r ./requirements.txt`
 **NOTE: Make sure to run with PyTorch >= 1.6 (any version with AMP integrated into it)**
 
 
+
+
 ### Inference Videos
 When adding videos for inference, make sure to place the videos in the following format example:
 
@@ -35,6 +37,7 @@ The folder layout should look like this:
         └── <video_title>_3.mp4
 ```
 
+For downloading the videos used in the datasets provided, please refer to the [YouCook2 dataset](http://youcook2.eecs.umich.edu/).
 
 
 ## Running Inference
