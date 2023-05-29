@@ -165,3 +165,15 @@ models/models--bigscience--T0_3B/snapshots/8794c7177e3a67b8a0ec739d94eecfa6a591c
 models/models--bigscience--T0_3B/snapshots/8794c7177e3a67b8a0ec739d94eecfa6a591c974/tokenizer_config.json
 
 SwinBERT/
+Videos/
+._.DS_Store
+.DS_Store
+apex1.out
+Models/flan-t5-small-trained-2/pytorch_model.bin
+Models/flan-t5-small-trained-2/generation_config.json
+Models/flan-t5-small-trained-2/config.json
+vid_split.csv
+output5.txt
+output3.out
+output2.out
+output.out

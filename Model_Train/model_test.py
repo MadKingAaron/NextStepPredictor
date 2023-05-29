@@ -10,7 +10,7 @@ from pandas import DataFrame
 from tqdm import tqdm
 
 def get_model(model_dir:str = "./flan-t5-small-trained"):
-    model = AutoModelForSeq2SeqLM.from_pretrained("./flan-t5-small-trained")
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
     tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-small")
 
     return model, tokenizer
@@ -90,9 +90,9 @@ def get_predictions(batch_size = 2, test_dataset_type:str = 'csv', dataset_dict:
 #     print(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 #     print(tokenizer.batch_decode(convert_labels(batch['labels'], tokenizer), skip_special_tokens=True))
 
-def test_model(batch_size = 2, test_dataset_type:str = 'csv', test_dataset:typing.Union(str, DataFrame) = './yc2_captions/test.csv', device:str='cpu'):
+def test_model(batch_size = 2, test_dataset_type:str = 'csv', test_dataset = './yc2_captions/test.csv', device:str='cpu', model_path:str="./Models/flan-t5-small-trained"):
     datafiles = {'train':test_dataset, 'validation':test_dataset, 'test':test_dataset}
-    preds, labels = get_predictions(batch_size, test_dataset_type=test_dataset_type, dataset_dict=datafiles, device=device)
+    preds, labels = get_predictions(batch_size, test_dataset_type=test_dataset_type, dataset_dict=datafiles, device=device, model_path=model_path)
 
     print('BLEU Score:\t', get_bleu_score(preds, labels))
     print('METEOR Score:\t', get_meteor_score(preds, labels))
